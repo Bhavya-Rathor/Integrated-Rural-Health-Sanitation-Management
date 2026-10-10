@@ -52,7 +52,10 @@
         </tbody>
     </table>
 
-    <h2>Complaints</h2>
+    <div class="page-header">
+        <h2>Complaints</h2>
+        <a class="btn" th:href="@{/sanitation/complaints/new(facilityId=${facility.id})}">+ Report complaint</a>
+    </div>
     <table class="table">
         <thead><tr><th>Title</th><th>Priority</th><th>Status</th><th>Reported</th><th>Officer remarks</th></tr></thead>
         <tbody>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Complaints')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="page-header">
+        <h1>Complaints</h1>
+        <a class="btn" th:href="@{/sanitation/complaints/new}">+ Report complaint</a>
+    </div>
+
+    <p class="flash" th:if="${message}" th:text="${message}"></p>
+
+    <form class="filters" method="get" th:action="@{/sanitation/complaints}">
+        <select name="status">
+            <option value="">All statuses</option>
+            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                    th:selected="${s == selectedStatus}"></option>
+        </select>
+        <button type="submit" class="btn">Filter</button>
+        <a th:href="@{/sanitation/complaints}">Clear</a>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th><th>Title</th><th>Facility</th><th>Village</th>
+            <th>Priority</th><th>Status</th><th>Reported</th><th>Officer remarks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${complaints}">
+            <td th:text="${c.id}"></td>
+            <td th:text="${c.title}"></td>
+            <td><a th:href="@{/sanitation/facilities/{id}(id=${c.facility.id})}" th:text="${c.facility.name}"></a></td>
+            <td th:text="${c.facility.village}"></td>
+            <td><span class="badge" th:classappend="${c.priority.name()}" th:text="${c.priority}"></span></td>
+            <td><span class="badge" th:classappend="${c.status.name()}" th:text="${c.status}"></span></td>
+            <td th:text="${c.reportedOn}"></td>
+            <td th:text="${c.officerRemarks}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(complaints)}"><td colspan="8">No complaints found.</td></tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

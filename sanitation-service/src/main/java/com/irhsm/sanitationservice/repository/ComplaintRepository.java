@@ -15,4 +15,8 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
 
     // facility.id → Spring follows the relationship for you
     List<Complaint> findByFacilityId(Long facilityId);
+
+    List<Complaint> findAllByOrderByReportedOnDesc();
+
+    List<Complaint> findByStatusOrderByReportedOnDesc(WorkStatus status);
 }

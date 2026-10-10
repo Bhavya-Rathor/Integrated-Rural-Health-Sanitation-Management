@@ -90,4 +90,10 @@ public class ComplaintService {
     public List<Complaint> findByFacility(Long facilityId) {
         return complaintRepository.findByFacilityId(facilityId);
     }
+
+    public List<Complaint> search(WorkStatus status) {
+        return (status == null)
+                ? complaintRepository.findAllByOrderByReportedOnDesc()
+                : complaintRepository.findByStatusOrderByReportedOnDesc(status);
+    }
 }
