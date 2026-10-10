@@ -14,7 +14,7 @@ public record ResidentDto(Long id, String fullName, String gender, LocalDate dat
                 // r.getAge(),
                 r.getGender() != null ? r.getGender().name() : null,
                 r.getDateOfBirth(),
-                r.getPhone(),\
+                r.getPhone(),
                 r.getVillage(),
                 r.getHouseholdNo(),
                 r.getAbhaNumber());
