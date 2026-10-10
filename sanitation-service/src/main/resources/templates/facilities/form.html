@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Facility form')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <h1 th:text="${facility.id == null} ? 'Add facility' : 'Edit facility'">Facility</h1>
+
+    <form class="form" method="post" th:action="@{/sanitation/facilities}" th:object="${facility}">
+        <input type="hidden" th:field="*{id}">
+
+        <label>Name
+            <input type="text" th:field="*{name}">
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+
+        <label>Type
+            <select th:field="*{type}">
+                <option value="">-- choose --</option>
+                <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+            </select>
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></span>
+
+        <label>Village
+            <input type="text" list="village-list" th:field="*{village}">
+            <datalist id="village-list">
+                <option th:each="v : ${villages}" th:value="${v}"></option>
+            </datalist>
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('village')}" th:errors="*{village}"></span>
+
+        <label>Location
+            <input type="text" th:field="*{locationDesc}" placeholder="e.g. near primary school">
+        </label>
+
+        <label>Capacity
+            <input type="number" th:field="*{capacity}" min="1">
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}"></span>
+
+        <label>Condition
+            <select th:field="*{condition}">
+                <option value="">-- choose --</option>
+                <option th:each="c : ${conditions}" th:value="${c}" th:text="${c}"></option>
+            </select>
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('condition')}" th:errors="*{condition}"></span>
+
+        <label>Last cleaned on
+            <input type="date" th:field="*{lastCleanedOn}">
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('lastCleanedOn')}" th:errors="*{lastCleanedOn}"></span>
+
+        <label>Caretaker
+            <input type="text" th:field="*{caretakerName}">
+        </label>
+
+        <div class="actions">
+            <button type="submit" class="btn">Save</button>
+            <a th:href="@{/sanitation/facilities}">Cancel</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
