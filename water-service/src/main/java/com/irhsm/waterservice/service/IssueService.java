@@ -109,4 +109,8 @@ public class IssueService {
         }
         return actionRepository.save(action);
     }
+
+    public List<PublicHealthIssue> search(WorkStatus status) {
+        return (status == null) ? findAll() : issueRepository.findByStatusOrderByReportedOnDesc(status);
+    }
 }

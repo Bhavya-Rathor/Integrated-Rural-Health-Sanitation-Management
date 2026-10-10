@@ -1,0 +1,24 @@
+body { font-family: Arial, sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+.navbar { background: #2f6f8f; padding: 10px 20px; }  /* team colour */
+.navbar a { color: #fff; margin-right: 16px; text-decoration: none; font-size: 14px; }
+.navbar a.active { font-weight: bold; text-decoration: underline; }
+.container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+.page-header { display: flex; justify-content: space-between; align-items: center; }
+.btn { background: #2f6f8f; color: #fff; border: 0; padding: 8px 14px; border-radius: 6px; text-decoration: none; cursor: pointer; }
+.table { width: 100%; border-collapse: collapse; background: #fff; margin: 12px 0 24px; }
+.table th, .table td { padding: 10px; border-bottom: 1px solid #e4e7eb; text-align: left; }
+.filters, .form.inline { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 12px 0; }
+.form { display: grid; gap: 10px; max-width: 480px; }
+.form label { display: grid; gap: 4px; }
+input, select { padding: 7px; border: 1px solid #cbd2d9; border-radius: 6px; }
+.error { color: #b42318; font-size: 0.9em; }
+.flash { background: #e6f4ea; padding: 10px; border-radius: 6px; }
+.flash.error { background: #fdecea; }
+.details { display: grid; grid-template-columns: 160px 1fr; gap: 6px 12px; background: #fff; padding: 16px; border-radius: 6px; }
+.badge { padding: 3px 8px; border-radius: 10px; font-size: 0.85em; background: #e4e7eb; }
+.badge.FUNCTIONAL, .badge.RESOLVED, .badge.LOW { background: #e6f4ea; color: #1e6b34; }
+.badge.NEEDS_REPAIR, .badge.IN_PROGRESS, .badge.ASSIGNED, .badge.MEDIUM { background: #fff4e5; color: #8a5300; }
+.badge.NON_FUNCTIONAL, .badge.OPEN, .badge.HIGH { background: #fdecea; color: #b42318; }
+.badge.SAFE, .badge.DONE { background: #e6f4ea; color: #1e6b34; }
+.badge.UNSAFE { background: #fdecea; color: #b42318; }
+.badge.PLANNED { background: #fff4e5; color: #8a5300; }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · Rural Health'">Page</title>
+    <link rel="stylesheet" th:href="@{/water/css/style.css}">
+</head>
+<body>
+<!-- Shared team navbar: same 8 links, same order, in every service.
+     Links start with "/" so they go through the gateway on 8080. -->
+<!-- Navbar links point at the gateway (8080) so they work even if a page is opened on its own port -->
+<nav th:fragment="navbar" class="navbar">
+    <a href="http://localhost:8080/dashboard">Dashboard</a>
+    <a href="http://localhost:8080/residents">Residents</a>
+    <a href="http://localhost:8080/centres">Health Centres</a>
+    <a href="http://localhost:8080/appointments">Appointments</a>
+    <a href="http://localhost:8080/medicines">Medicines</a>
+    <a href="http://localhost:8080/camps">Health Camps</a>
+    <a href="http://localhost:8080/sanitation" class="active">Sanitation</a>
+    <a href="http://localhost:8080/water">Water</a>
+</nav>
+</body>
+</html>

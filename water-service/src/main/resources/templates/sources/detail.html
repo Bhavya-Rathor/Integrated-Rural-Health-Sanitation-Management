@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Water source')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container">
+    <p class="flash" th:if="${message}" th:text="${message}"></p>
+    <p class="flash error" th:if="${error}" th:text="${error}"></p>
+
+    <div class="page-header">
+        <h1 th:text="${source.name}">Source</h1>
+        <a class="btn" th:href="@{/water/sources/{id}/edit(id=${source.id})}">Edit</a>
+    </div>
+
+    <dl class="details">
+        <dt>Type</dt>       <dd th:text="${source.type}"></dd>
+        <dt>Village</dt>    <dd th:text="${source.village}"></dd>
+        <dt>Location</dt>   <dd th:text="${source.locationDesc}"></dd>
+        <dt>Households</dt> <dd th:text="${source.householdsServed}"></dd>
+        <dt>Working</dt>    <dd th:text="${source.functional} ? 'Yes' : 'No'"></dd>
+    </dl>
+
+    <h2>Record a water test</h2>
+    <p>Checked against IS 10500: pH 6.5–8.5, TDS ≤ 500 mg/L, chlorine ≥ 0.2 mg/L (if chlorinated), turbidity ≤ 5 NTU, no coliform.</p>
+    <form class="form inline" method="post" th:action="@{/water/sources/{id}/tests(id=${source.id})}">
+        <input type="hidden" name="sourceId" th:value="${source.id}">
+        <input type="date" name="testDate" required>
+        <input type="text" name="testedBy" placeholder="Tested by" required>
+        <input type="number" step="0.1" name="ph" placeholder="pH" required>
+        <input type="number" step="1" name="tds" placeholder="TDS mg/L" required>
+        <input type="number" step="0.1" name="residualChlorine" placeholder="Chlorine (optional)">
+        <input type="number" step="0.1" name="turbidity" placeholder="Turbidity NTU" required>
+        <select name="coliformPresent">
+            <option value="false">No coliform</option>
+            <option value="true">Coliform present</option>
+        </select>
+        <button type="submit" class="btn">Save test</button>
+    </form>
+
+    <h2>Test history</h2>
+    <table class="table">
+        <thead><tr><th>Date</th><th>Tested by</th><th>pH</th><th>TDS</th><th>Chlorine</th><th>Turbidity</th><th>Coliform</th><th>Result</th><th>Failed</th></tr></thead>
+        <tbody>
+        <tr th:each="t : ${tests}">
+            <td th:text="${t.testDate}"></td>
+            <td th:text="${t.testedBy}"></td>
+            <td th:text="${t.ph}"></td>
+            <td th:text="${t.tds}"></td>
+            <td th:text="${t.residualChlorine} ?: '–'"></td>
+            <td th:text="${t.turbidity}"></td>
+            <td th:text="${t.coliformPresent} ? 'Yes' : 'No'"></td>
+            <td><span class="badge" th:classappend="${t.result.name()}" th:text="${t.result}"></span></td>
+            <td th:text="${t.failedParameters}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(tests)}"><td colspan="9">No tests yet.</td></tr>
+        </tbody>
+    </table>
+    <p><a th:href="@{/water/sources}">← Back to all sources</a></p>
+</main>
+</body>
+</html>
