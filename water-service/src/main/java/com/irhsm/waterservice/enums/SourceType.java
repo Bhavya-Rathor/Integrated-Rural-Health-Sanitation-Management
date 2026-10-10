@@ -1,7 +1,3 @@
 package com.irhsm.waterservice.enums;
 
-public enum Priority {
-    LOW,
-    MEDIUM,
-    HIGH
-}
+public enum SourceType { HANDPUMP, BOREWELL, TAP_SUPPLY, OPEN_WELL, TANK }

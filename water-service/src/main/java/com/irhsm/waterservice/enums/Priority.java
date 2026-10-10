@@ -1,4 +1,4 @@
-package com.irhsm.sanitationservice.enums;
+package com.irhsm.waterservice.enums;
 
 public enum Priority {
     LOW,
