@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add staff</title>
+    <link rel="stylesheet" th:href="@{/camps/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container" style="max-width:600px">
+    <h1>Add staff</h1>
+    <p class="muted" th:text="'For: ' + ${camp.name} + ' (' + ${camp.campDate} + ')'"></p>
+
+    <form th:action="@{/camps/{id}/staff(id=${camp.id})}" th:object="${staffForm}" method="post">
+        <p>
+            <label>Worker ID *</label><br>
+            <input type="number" th:field="*{workerId}" min="1" placeholder="from Health Centres">
+            <span class="error" th:if="${#fields.hasErrors('workerId')}" th:errors="*{workerId}"></span>
+        </p>
+        <p>
+            <label>Name *</label><br>
+            <input type="text" th:field="*{workerName}" style="width:100%">
+            <span class="error" th:if="${#fields.hasErrors('workerName')}" th:errors="*{workerName}"></span>
+        </p>
+        <p>
+            <label>Role *</label><br>
+            <select th:field="*{role}">
+                <option value="">-- choose --</option>
+                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+        </p>
+        <p>
+            <label>Duty</label><br>
+            <input type="text" th:field="*{duty}" style="width:100%" placeholder="e.g. BP desk">
+        </p>
+
+        <button type="submit" class="btn">Add</button>
+        <a th:href="@{/camps/{id}(id=${camp.id})}" class="btn btn-light">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

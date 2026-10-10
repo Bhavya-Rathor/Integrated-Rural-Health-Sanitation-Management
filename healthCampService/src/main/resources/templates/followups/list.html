@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Camp follow-ups</title>
+    <link rel="stylesheet" th:href="@{/camps/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Camp follow-ups</h1>
+        <a th:href="@{/camps}" class="btn btn-light">All camps</a>
+    </div>
+    <p class="muted">Created automatically when a screening is ABNORMAL (recheck in 7 days) or CRITICAL (refer to centre in 2 days).
+        PENDING ones also appear on the Community Health Dashboard.</p>
+
+    <div th:if="${message}" class="flash" th:text="${message}"></div>
+    <div th:if="${error}" class="flash err" th:text="${error}"></div>
+
+    <form class="filters" th:action="@{/camps/followups}" method="get">
+        <select name="status">
+            <option value="">All statuses</option>
+            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == selectedStatus}"></option>
+        </select>
+        <button type="submit" class="btn">Filter</button>
+        <a th:href="@{/camps/followups}" class="btn btn-light">Clear</a>
+    </form>
+
+    <table>
+        <thead>
+        <tr><th>Priority</th><th>Resident</th><th>Village</th><th>Screening</th><th>Action</th>
+            <th>Due</th><th>Status</th><th>Outcome / close</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${followUps}">
+            <td><span class="badge" th:classappend="${f.priority}" th:text="${f.priority}"></span></td>
+            <td th:text="${f.residentName}">Name</td>
+            <td th:text="${f.village}">Katpadi</td>
+            <td th:text="${f.screening.screeningType} + ' ' + ${f.screening.reading}">BP 150/95</td>
+            <td th:text="${f.action}">RECHECK</td>
+            <td th:text="${f.dueDate}">2026-10-12</td>
+            <td><span class="badge" th:classappend="${f.status}" th:text="${f.status}"></span></td>
+            <td>
+                <span th:if="${f.status.name() != 'PENDING'}" th:text="${f.outcome}"></span>
+                <form class="inline" style="margin:0" th:if="${f.status.name() == 'PENDING'}"
+                      th:action="@{/camps/followups/{id}/status(id=${f.id})}" method="post">
+                    <input type="text" name="outcome" placeholder="Outcome" style="width:130px">
+                    <button type="submit" name="status" value="DONE" class="btn btn-small btn-ok">Done</button>
+                    <button type="submit" name="status" value="REFERRED" class="btn btn-small">Referred</button>
+                    <button type="submit" name="status" value="MISSED" class="btn btn-small btn-danger">Missed</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(followUps)}"><td colspan="8">No follow-ups.</td></tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

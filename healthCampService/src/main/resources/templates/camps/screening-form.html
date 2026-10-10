@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Record screening</title>
+    <link rel="stylesheet" th:href="@{/camps/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container" style="max-width:600px">
+    <h1>Record screening</h1>
+    <p class="muted" th:text="'For: ' + ${camp.name} + ' (' + ${camp.campDate} + ')'"></p>
+    <p class="muted">ABNORMAL creates a recheck follow-up (7 days); CRITICAL creates a HIGH-priority referral (2 days).</p>
+    <div th:if="${error}" class="flash err" th:text="${error}"></div>
+
+    <form th:action="@{/camps/{id}/screenings(id=${camp.id})}" th:object="${screeningForm}" method="post">
+        <p>
+            <label>Resident *</label><br>
+            <select th:field="*{beneficiaryId}">
+                <option value="">-- choose --</option>
+                <option th:each="b : ${beneficiaries}" th:value="${b.id}"
+                        th:text="${b.residentName} + ' (ID ' + ${b.residentId} + ')'"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('beneficiaryId')}" th:errors="*{beneficiaryId}"></span>
+        </p>
+        <p>
+            <label>Test *</label><br>
+            <select th:field="*{screeningType}">
+                <option value="">-- choose --</option>
+                <option th:each="t : ${screeningTypes}" th:value="${t}" th:text="${t}"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('screeningType')}" th:errors="*{screeningType}"></span>
+        </p>
+        <p>
+            <label>Reading *</label><br>
+            <input type="text" th:field="*{reading}" style="width:100%" placeholder="e.g. 152/96 mmHg">
+            <span class="error" th:if="${#fields.hasErrors('reading')}" th:errors="*{reading}"></span>
+        </p>
+        <p>
+            <label>Result *</label><br>
+            <select th:field="*{result}">
+                <option value="">-- choose --</option>
+                <option th:each="r : ${results}" th:value="${r}" th:text="${r}"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('result')}" th:errors="*{result}"></span>
+        </p>
+        <p>
+            <label>Screened by</label><br>
+            <input type="text" th:field="*{screenedBy}" style="width:100%">
+        </p>
+        <p>
+            <label>Remarks</label><br>
+            <input type="text" th:field="*{remarks}" style="width:100%">
+        </p>
+
+        <button type="submit" class="btn">Save</button>
+        <a th:href="@{/camps/{id}(id=${camp.id})}" class="btn btn-light">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

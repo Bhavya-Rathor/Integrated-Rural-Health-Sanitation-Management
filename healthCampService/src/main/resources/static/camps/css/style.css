@@ -1,0 +1,35 @@
+/* Team style (same as Medicine, Dashboard, Sanitation).
+   Kept under /camps/... so the gateway routes it to this service. */
+body { font-family: Arial, sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+.navbar { background: #2f6f8f; padding: 10px 20px; }
+.navbar a { color: #fff; margin-right: 16px; text-decoration: none; font-size: 14px; }
+.navbar a.active { font-weight: bold; text-decoration: underline; }
+.container { max-width: 1150px; margin: 24px auto; padding: 0 16px; }
+h1 { font-size: 24px; margin-bottom: 16px; }
+h2 { font-size: 18px; margin: 28px 0 10px; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { padding: 9px 12px; border-bottom: 1px solid #e3e3e3; text-align: left; font-size: 14px; }
+th { background: #eef3f6; }
+.btn { display: inline-block; padding: 7px 14px; border-radius: 5px; background: #2f6f8f;
+    color: #fff; text-decoration: none; border: none; cursor: pointer; font-size: 14px; }
+.btn-light { background: #e3e8ec; color: #222; }
+.btn-danger { background: #b03a2e; }
+.btn-ok { background: #1c6b3a; }
+.btn-small { padding: 4px 9px; font-size: 13px; }
+.filters, .inline { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+input, select { padding: 7px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+.form { display: grid; gap: 12px; max-width: 520px; background: #fff; padding: 18px; border-radius: 8px; }
+.form label { display: grid; gap: 4px; font-size: 14px; font-weight: bold; }
+.form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.card { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.details { display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px; font-size: 14px; }
+.badge { padding: 2px 8px; border-radius: 10px; font-size: 12px; background: #e3e8ec; white-space: nowrap; }
+.badge.PLANNED, .badge.REGISTERED, .badge.MEDIUM, .badge.ABNORMAL, .badge.REFERRED { background: #fff4e5; color: #8a5300; }
+.badge.ONGOING { background: #e3eefb; color: #1d4f91; }
+.badge.COMPLETED, .badge.ATTENDED, .badge.NORMAL, .badge.DONE, .badge.LOW { background: #d9f2e3; color: #1c6b3a; }
+.badge.CANCELLED, .badge.ABSENT, .badge.CRITICAL, .badge.HIGH, .badge.PENDING, .badge.MISSED { background: #f6d5d1; color: #b03a2e; }
+.error { color: #b03a2e; font-size: 13px; font-weight: normal; }
+.flash { padding: 10px; background: #d9f2e3; border-radius: 5px; margin-bottom: 16px; }
+.flash.err { background: #f6d5d1; }
+.muted { color: #777; font-size: 13px; }
+.page-header { display: flex; justify-content: space-between; align-items: center; }
