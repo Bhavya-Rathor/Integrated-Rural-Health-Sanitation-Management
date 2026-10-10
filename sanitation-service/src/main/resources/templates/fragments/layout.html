@@ -7,13 +7,18 @@
     <link rel="stylesheet" th:href="@{/sanitation/css/style.css}">
 </head>
 <body>
+<!-- Shared team navbar: same 8 links, same order, in every service.
+     Links start with "/" so they go through the gateway on 8080. -->
+<!-- Navbar links point at the gateway (8080) so they work even if a page is opened on its own port -->
 <nav th:fragment="navbar" class="navbar">
-    <span class="brand">Rural Health &amp; Sanitation</span>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/sanitation">Sanitation</a>
-    <a href="/water">Water</a>
-    <a href="/medicines">Medicines</a>
-    <!-- replace with Sanjeevni's shared navbar; links must start with "/" -->
+    <a href="http://localhost:8080/dashboard">Dashboard</a>
+    <a href="http://localhost:8080/residents">Residents</a>
+    <a href="http://localhost:8080/centres">Health Centres</a>
+    <a href="http://localhost:8080/appointments">Appointments</a>
+    <a href="http://localhost:8080/medicines">Medicines</a>
+    <a href="http://localhost:8080/camps">Health Camps</a>
+    <a href="http://localhost:8080/sanitation" class="active">Sanitation</a>
+    <a href="http://localhost:8080/water">Water</a>
 </nav>
 </body>
 </html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- No id yet = adding; has id = editing -->
+    <title th:text="${camp.id == null} ? 'Plan a camp' : 'Edit camp'">Camp</title>
+    <link rel="stylesheet" th:href="@{/camps/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container" style="max-width:600px">
+    <h1 th:text="${camp.id == null} ? 'Plan a camp' : 'Edit camp'">Camp</h1>
+    <div th:if="${error}" class="flash err" th:text="${error}"></div>
+
+    <!-- th:object = this form is bound to the "camp" object from the Model.
+         *{field} = a field of that object. th:field fills in name, id and value. -->
+    <form th:action="@{/camps}" th:object="${camp}" method="post">
+
+        <!-- Hidden id: empty when adding, filled when editing -> save() knows which -->
+        <input type="hidden" th:field="*{id}">
+
+        <p>
+            <label>Camp name *</label><br>
+            <input type="text" th:field="*{name}" style="width:100%" placeholder="e.g. NCD screening camp - Katpadi">
+            <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </p>
+
+        <p>
+            <label>Camp type *</label><br>
+            <select th:field="*{campType}">
+                <option value="">-- choose --</option>
+                <option th:each="t : ${campTypes}" th:value="${t}" th:text="${t}"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('campType')}" th:errors="*{campType}"></span>
+        </p>
+
+        <p>
+            <label>Village *</label><br>
+            <input type="text" th:field="*{village}" style="width:100%">
+            <span class="error" th:if="${#fields.hasErrors('village')}" th:errors="*{village}"></span>
+        </p>
+
+        <p>
+            <label>Venue *</label><br>
+            <input type="text" th:field="*{venue}" style="width:100%" placeholder="e.g. Govt. school hall">
+            <span class="error" th:if="${#fields.hasErrors('venue')}" th:errors="*{venue}"></span>
+        </p>
+
+        <p>
+            <label>Camp date *</label><br>
+            <input type="date" th:field="*{campDate}">
+            <span class="error" th:if="${#fields.hasErrors('campDate')}" th:errors="*{campDate}"></span>
+        </p>
+
+        <p>
+            <label>Start time</label><br>
+            <input type="time" th:field="*{startTime}">
+        </p>
+
+        <p>
+            <label>End time</label><br>
+            <input type="time" th:field="*{endTime}">
+        </p>
+
+        <p>
+            <label>Target (number of people)</label><br>
+            <input type="number" th:field="*{targetCount}" min="0">
+            <span class="error" th:if="${#fields.hasErrors('targetCount')}" th:errors="*{targetCount}"></span>
+        </p>
+
+        <p>
+            <label>Health centre ID</label><br>
+            <input type="number" th:field="*{centreId}" min="1" placeholder="from Health Centres">
+        </p>
+
+        <p>
+            <label>Status</label><br>
+            <select th:field="*{status}">
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+            </select>
+        </p>
+
+        <button type="submit" class="btn">Save</button>
+        <a th:href="${camp.id == null} ? @{/camps} : @{/camps/{id}(id=${camp.id})}" class="btn btn-light">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

@@ -21,9 +21,9 @@ public class ServiceDirectory {
         this.services = List.of(
                 //              key             label                    url           api path             approve     reject
                 new ServiceInfo("medicines",    "Medicine & Inventory",  medicines,    "/api/medicines",    "APPROVED", "REJECTED"),
-                new ServiceInfo("sanitation",   "Sanitation",            sanitation,   "/api/sanitation",   "APPROVED", "REJECTED"),
+                new ServiceInfo("sanitation",   "Sanitation",            sanitation,   "/api/sanitation",   "ASSIGNED", "RESOLVED"),
                 new ServiceInfo("water",        "Water & Public Health", water,        "/api/water",        "APPROVED", "REJECTED"),
-                new ServiceInfo("camps",        "Health Camps",          camps,        "/api/camps",        "APPROVED", "REJECTED"),
+                new ServiceInfo("camps",        "Health Camps",          camps,        "/api/camps",        "REFERRED", "MISSED"),
                 new ServiceInfo("appointments", "Appointments",          appointments, "/api/appointments", "APPROVED", "REJECTED")
         );
     }

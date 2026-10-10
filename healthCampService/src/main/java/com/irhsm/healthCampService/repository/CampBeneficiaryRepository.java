@@ -10,4 +10,6 @@ public interface CampBeneficiaryRepository extends JpaRepository<CampBeneficiary
     List<CampBeneficiary> findByCampId(Long campId);                    
     boolean existsByCampIdAndResidentId(Long campId, Long residentId);  
     long countByCampId(Long campId);                                    
+
+    List<CampBeneficiary> findByCampIdOrderByResidentNameAsc(Long campId);   // detail page, A-Z
 }

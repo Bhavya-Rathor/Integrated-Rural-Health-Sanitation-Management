@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${camp.name}">Camp</title>
+    <link rel="stylesheet" th:href="@{/camps/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1 th:text="${camp.name}">Camp</h1>
+
+    <!-- One-time messages after a save (from RedirectAttributes) -->
+    <div th:if="${message}" class="flash" th:text="${message}"></div>
+    <div th:if="${error}" class="flash err" th:text="${error}"></div>
+
+    <!-- Camp details: same layout as the medicine detail page -->
+    <table style="max-width:600px">
+        <tr><th>Type</th><td th:text="${camp.campType}"></td></tr>
+        <tr><th>Village</th><td th:text="${camp.village}"></td></tr>
+        <tr><th>Venue</th><td th:text="${camp.venue}"></td></tr>
+        <tr><th>Date</th><td th:text="${camp.campDate}"></td></tr>
+        <tr><th>Time</th><td th:text="(${camp.startTime} ?: '-') + ' to ' + (${camp.endTime} ?: '-')"></td></tr>
+        <tr><th>Health centre ID</th><td th:text="${camp.centreId} ?: '-'"></td></tr>
+        <tr><th>Registered / target</th><td th:text="${#lists.size(beneficiaries)} + ' / ' + (${camp.targetCount} ?: '-')"></td></tr>
+        <tr><th>Status</th>
+            <td>
+                <span class="badge" th:classappend="${camp.status}" th:text="${camp.status}"></span>
+                <form th:action="@{/camps/{id}/status(id=${camp.id})}" method="post" style="display:inline; margin-left:10px">
+                    <select name="status">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == camp.status}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-light btn-small">Change</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a th:href="@{/camps/{id}/edit(id=${camp.id})}" class="btn">Edit</a>
+        <a th:href="@{/camps}" class="btn btn-light">Back to list</a>
+    </p>
+
+    <!-- Residents -->
+    <div class="page-header" style="margin-top:32px">
+        <h2>Residents</h2>
+        <a th:href="@{/camps/{id}/beneficiaries/new(id=${camp.id})}" class="btn">+ Register resident</a>
+    </div>
+    <table>
+        <thead><tr><th>Resident ID</th><th>Name</th><th>Village</th><th>Age</th><th>Gender</th><th>Attendance</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="b : ${beneficiaries}">
+            <td th:text="${b.residentId}">1</td>
+            <td th:text="${b.residentName}">Name</td>
+            <td th:text="${b.village}">Katpadi</td>
+            <td th:text="${b.age}">40</td>
+            <td th:text="${b.gender}">F</td>
+            <td><span class="badge" th:classappend="${b.attendance}" th:text="${b.attendance}"></span></td>
+            <td>
+                <form th:action="@{/camps/{id}/beneficiaries/{bid}/attendance(id=${camp.id},bid=${b.id})}" method="post" style="display:inline">
+                    <select name="attendance">
+                        <option th:each="a : ${attendances}" th:value="${a}" th:text="${a}" th:selected="${a == b.attendance}"></option>
+                    </select>
+                    <button type="submit" class="btn btn-light btn-small">Set</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(beneficiaries)}"><td colspan="7">No residents registered yet.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- Screenings -->
+    <div class="page-header" style="margin-top:32px">
+        <h2>Screenings</h2>
+        <a th:if="${!#lists.isEmpty(beneficiaries)}" th:href="@{/camps/{id}/screenings/new(id=${camp.id})}" class="btn">+ Record screening</a>
+    </div>
+    <table>
+        <thead><tr><th>When</th><th>Resident</th><th>Test</th><th>Reading</th><th>Result</th><th>By</th><th>Remarks</th></tr></thead>
+        <tbody>
+        <tr th:each="s : ${screenings}">
+            <!-- #temporals.format = format a date-time nicely -->
+            <td th:text="${#temporals.format(s.screenedAt, 'dd MMM yyyy HH:mm')}"></td>
+            <td th:text="${s.beneficiary.residentName}">Name</td>
+            <td th:text="${s.screeningType}">BP</td>
+            <td th:text="${s.reading}">120/80</td>
+            <td><span class="badge" th:classappend="${s.result}" th:text="${s.result}"></span></td>
+            <td th:text="${s.screenedBy}"></td>
+            <td th:text="${s.remarks}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(screenings)}"><td colspan="7">No screenings yet.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- Follow-ups -->
+    <div class="page-header" style="margin-top:32px">
+        <h2>Follow-ups from this camp</h2>
+        <a th:href="@{/camps/followups}" class="btn btn-light">Manage follow-ups</a>
+    </div>
+    <table>
+        <thead><tr><th>Priority</th><th>Resident</th><th>Action</th><th>Due</th><th>Status</th><th>Outcome</th></tr></thead>
+        <tbody>
+        <tr th:each="f : ${followUps}">
+            <td><span class="badge" th:classappend="${f.priority}" th:text="${f.priority}"></span></td>
+            <td th:text="${f.residentName}">Name</td>
+            <td th:text="${f.action}">RECHECK</td>
+            <td th:text="${f.dueDate}">2026-10-12</td>
+            <td><span class="badge" th:classappend="${f.status}" th:text="${f.status}"></span></td>
+            <td th:text="${f.outcome}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(followUps)}"><td colspan="6">No follow-ups.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- Camp team -->
+    <div class="page-header" style="margin-top:32px">
+        <h2>Camp team</h2>
+        <a th:href="@{/camps/{id}/staff/new(id=${camp.id})}" class="btn">+ Add staff</a>
+    </div>
+    <table>
+        <thead><tr><th>Worker ID</th><th>Name</th><th>Role</th><th>Duty</th></tr></thead>
+        <tbody>
+        <tr th:each="m : ${staff}">
+            <td th:text="${m.workerId}">1</td>
+            <td th:text="${m.workerName}">Name</td>
+            <td th:text="${m.role}">DOCTOR</td>
+            <td th:text="${m.duty}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(staff)}"><td colspan="4">No staff added yet.</td></tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

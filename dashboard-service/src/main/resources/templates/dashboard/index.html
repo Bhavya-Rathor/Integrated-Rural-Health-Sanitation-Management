@@ -8,15 +8,16 @@
 <body>
 
 <!-- Navbar: links start with "/" so they go through the gateway -->
+<!-- Navbar links point at the gateway (8080) so they work even if a page is opened on its own port -->
 <nav class="navbar">
-    <a href="/dashboard" class="active">Dashboard</a>
-    <a href="/residents">Residents</a>
-    <a href="/centres">Health Centres</a>
-    <a href="/appointments">Appointments</a>
-    <a href="/medicines">Medicines</a>
-    <a href="/camps">Health Camps</a>
-    <a href="/sanitation">Sanitation</a>
-    <a href="/water">Water</a>
+    <a href="http://localhost:8080/dashboard" class="active">Dashboard</a>
+    <a href="http://localhost:8080/residents">Residents</a>
+    <a href="http://localhost:8080/centres">Health Centres</a>
+    <a href="http://localhost:8080/appointments">Appointments</a>
+    <a href="http://localhost:8080/medicines">Medicines</a>
+    <a href="http://localhost:8080/camps">Health Camps</a>
+    <a href="http://localhost:8080/sanitation">Sanitation</a>
+    <a href="http://localhost:8080/water">Water</a>
 </nav>
 
 <div class="container">

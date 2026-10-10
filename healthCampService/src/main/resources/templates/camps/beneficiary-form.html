@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register resident</title>
+    <link rel="stylesheet" th:href="@{/camps/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container" style="max-width:600px">
+    <h1>Register resident</h1>
+    <p class="muted" th:text="'For: ' + ${camp.name} + ' (' + ${camp.campDate} + ')'"></p>
+    <div th:if="${error}" class="flash err" th:text="${error}"></div>
+
+    <form th:action="@{/camps/{id}/beneficiaries(id=${camp.id})}" th:object="${beneficiaryForm}" method="post">
+        <p>
+            <label>Resident ID *</label><br>
+            <input type="number" th:field="*{residentId}" min="1" placeholder="from Residents">
+            <span class="error" th:if="${#fields.hasErrors('residentId')}" th:errors="*{residentId}"></span>
+        </p>
+        <p>
+            <label>Name *</label><br>
+            <input type="text" th:field="*{residentName}" style="width:100%">
+            <span class="error" th:if="${#fields.hasErrors('residentName')}" th:errors="*{residentName}"></span>
+        </p>
+        <p>
+            <label>Village</label><br>
+            <input type="text" th:field="*{village}" style="width:100%" th:placeholder="${camp.village} + ' (camp village if blank)'">
+        </p>
+        <p>
+            <label>Age</label><br>
+            <input type="number" th:field="*{age}" min="0" max="120">
+            <span class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+        </p>
+        <p>
+            <label>Gender</label><br>
+            <select th:field="*{gender}">
+                <option value="">-- choose --</option>
+                <option value="F">F</option>
+                <option value="M">M</option>
+                <option value="Other">Other</option>
+            </select>
+        </p>
+
+        <button type="submit" class="btn">Register</button>
+        <a th:href="@{/camps/{id}(id=${camp.id})}" class="btn btn-light">Cancel</a>
+    </form>
+</div>
+</body>
+</html>
