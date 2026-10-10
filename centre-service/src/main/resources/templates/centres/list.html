@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Health Centres</title>
+    <style>
+        body { font-family: sans-serif; margin: 24px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+        .btn { padding: 6px 12px; background: #2b6cb0; color: white; text-decoration: none; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<nav><a href="/centres">Health Centres</a></nav>
+<h1>Health Centres</h1>
+
+<form method="get" action="/centres">
+    <input type="text" name="village" th:value="${village}" placeholder="Filter by village">
+    <button class="btn" type="submit">Filter</button>
+    <a href="/centres">Clear</a>
+</form>
+
+<p><a class="btn" href="/centres/new">+ Add centre</a></p>
+
+<table>
+    <tr><th>Name</th><th>Type</th><th>Village</th><th>Hours</th><th>Status</th><th></th></tr>
+    <tr th:each="c : ${centres}">
+        <td><a th:href="@{/centres/{id}(id=${c.id})}" th:text="${c.name}">Name</a></td>
+        <td th:text="${c.type}">PHC</td>
+        <td th:text="${c.village}">Village</td>
+        <td th:text="${c.open24x7} ? '24x7' : ${c.openingTime} + ' - ' + ${c.closingTime}">09:00 - 16:00</td>
+        <td th:text="${c.status}">ACTIVE</td>
+        <td><a th:href="@{/centres/{id}/edit(id=${c.id})}">Edit</a></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(centres)}"><td colspan="6">No centres found.</td></tr>
+</table>
+</body>
+</html>

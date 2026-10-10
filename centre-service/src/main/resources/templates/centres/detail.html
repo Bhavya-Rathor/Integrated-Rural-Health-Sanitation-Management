@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Centre Detail</title>
+    <style>
+        body { font-family: sans-serif; margin: 24px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+<nav><a href="/centres">Health Centres</a></nav>
+<h1 th:text="${centre.name}">Centre</h1>
+<p>
+    <b>Type:</b> <span th:text="${centre.type}"></span> &nbsp;
+    <b>Village:</b> <span th:text="${centre.village}"></span> &nbsp;
+    <b>Phone:</b> <span th:text="${centre.phone}"></span> &nbsp;
+    <b>Status:</b> <span th:text="${centre.status}"></span>
+</p>
+
+<h2>Facilities</h2>
+<table>
+    <tr><th>Name</th><th>Status</th><th>Priority</th><th>Remarks</th></tr>
+    <tr th:each="f : ${facilities}">
+        <td th:text="${f.name}"></td>
+        <td th:text="${f.status}"></td>
+        <td th:text="${f.priority}"></td>
+        <td th:text="${f.remarks}"></td>
+    </tr>
+</table>
+
+<h2>Active workers</h2>
+<table>
+    <tr><th>Name</th><th>Role</th><th>Qualification</th><th>Phone</th></tr>
+    <tr th:each="w : ${workers}">
+        <td th:text="${w.name}"></td>
+        <td th:text="${w.role}"></td>
+        <td th:text="${w.qualification}"></td>
+        <td th:text="${w.phone}"></td>
+    </tr>
+</table>
+
+<form th:action="@{/centres/{id}/delete(id=${centre.id})}" method="post" style="margin-top:16px">
+    <button type="submit" onclick="return confirm('Delete this centre?')">Delete centre</button>
+</form>
+</body>
+</html>
