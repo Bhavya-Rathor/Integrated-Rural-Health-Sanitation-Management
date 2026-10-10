@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- th:fragment="navbar" = give this block a name so other pages can include it.
+     Links start with "/" so they go through the gateway on port 8080
+     and reach each team member's service. -->
+<nav th:fragment="navbar" class="navbar">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/residents">Residents</a>
+    <a href="/centres">Health Centres</a>
+    <a href="/appointments">Appointments</a>
+    <a href="/medicines" class="active">Medicines</a>
+    <a href="/camps">Health Camps</a>
+    <a href="/sanitation">Sanitation</a>
+    <a href="/water">Water</a>
+</nav>
+</body>
+</html>

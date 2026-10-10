@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${medicine.name}">Medicine</title>
+    <link rel="stylesheet" th:href="@{/medicines/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1 th:text="${medicine.name}">Medicine</h1>
+
+    <!-- ===== Basic details ===== -->
+    <table style="max-width:520px; margin-bottom:24px">
+        <tr><th>Generic name</th><td th:text="${medicine.genericName}"></td></tr>
+        <tr><th>Form</th><td th:text="${medicine.form}"></td></tr>
+        <tr><th>Strength</th><td th:text="${medicine.strength}"></td></tr>
+        <tr><th>Unit</th><td th:text="${medicine.unit}"></td></tr>
+        <tr><th>Reorder level</th><td th:text="${medicine.reorderLevel}"></td></tr>
+        <tr><th>Essential</th><td th:text="${medicine.essential} ? 'Yes' : 'No'"></td></tr>
+    </table>
+    <a th:href="@{/medicines/{id}/edit(id=${medicine.id})}" class="btn">Edit</a>
+    <a th:href="@{/medicines}" class="btn btn-light">Back to list</a>
+
+    <!-- ===== Batches at every centre ===== -->
+    <h2 style="margin-top:32px">Stock batches</h2>
+    <table>
+        <thead>
+        <tr><th>Centre</th><th>Batch</th><th>Quantity</th><th>Expiry date</th><th>Received</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="b : ${batches}">
+            <td th:text="${b.centreId}"></td>
+            <td th:text="${b.batchNo}"></td>
+            <td th:text="${b.quantity}"></td>
+            <td th:text="${b.expiryDate}"></td>
+            <td th:text="${b.receivedDate}"></td>
+            <td>
+                <!-- Checked in this order: expired, empty, expiring soon, OK -->
+                <span th:if="${b.expiryDate.isBefore(today)}" class="badge" style="background:#f6d5d1">Expired</span>
+                <span th:if="${!b.expiryDate.isBefore(today) and b.quantity == 0}" class="badge">Empty</span>
+                <span th:if="${!b.expiryDate.isBefore(today) and b.quantity > 0 and b.expiryDate.isBefore(soon)}"
+                      class="badge" style="background:#fbe7c6">Expiring soon</span>
+                <span th:if="${!b.expiryDate.isBefore(soon) and b.quantity > 0}" class="badge badge-yes">OK</span>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(batches)}"><td colspan="6">No stock of this medicine yet.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ===== Restock requests for this medicine ===== -->
+    <h2 style="margin-top:32px">Restock requests</h2>
+    <table>
+        <thead>
+        <tr><th>#</th><th>Centre</th><th>Village</th><th>Had</th><th>Requested</th>
+            <th>Status</th><th>Priority</th><th>Source</th><th>Raised</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${requests}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.centreId}"></td>
+            <td th:text="${r.village}"></td>
+            <td th:text="${r.currentQty}"></td>
+            <td th:text="${r.requestedQty}"></td>
+            <td><span class="badge" th:text="${r.status}"></span></td>
+            <td th:text="${r.priority}"></td>
+            <td th:text="${r.source}"></td>
+            <!-- #temporals.format = format a date-time nicely -->
+            <td th:text="${#temporals.format(r.createdAt, 'dd MMM yyyy')}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(requests)}"><td colspan="9">No restock requests.</td></tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -87,3 +87,44 @@ Content-Type: application/json
   "quantity": 10,
   "expiryDate": "2027-01-01"
 }
+### 15. Issue 120 tablets -> FEFO: 100 from B-101 (expires first), 20 from B-205
+POST http://localhost:8084/api/medicines/issue
+Content-Type: application/json
+
+{
+  "medicineId": 1,
+  "centreId": 1,
+  "quantity": 120,
+  "residentId": 5,
+  "appointmentId": 12,
+  "issuedBy": "Pharmacist Ravi"
+}
+
+### 16. Stock after -> B-101 = 0, B-205 = 130
+GET http://localhost:8084/api/medicines/stock?centreId=1
+
+### 17. Issue 40 more -> total drops to 90, below 100 -> AUTO restock request created
+POST http://localhost:8084/api/medicines/issue
+Content-Type: application/json
+
+{
+  "medicineId": 1,
+  "centreId": 1,
+  "quantity": 40,
+  "residentId": 7,
+  "issuedBy": "Pharmacist Ravi"
+}
+
+### 18. Too much -> expect 409
+POST http://localhost:8084/api/medicines/issue
+Content-Type: application/json
+
+{
+  "medicineId": 1,
+  "centreId": 1,
+  "quantity": 1000,
+  "issuedBy": "Pharmacist Ravi"
+}
+
+### 19. Resident 5's history
+GET http://localhost:8084/api/medicines/issues?residentId=5

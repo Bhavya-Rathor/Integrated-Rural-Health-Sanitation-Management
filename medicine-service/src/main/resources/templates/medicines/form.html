@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- No id yet = adding; has id = editing -->
+    <title th:text="${medicine.id == null} ? 'Add medicine' : 'Edit medicine'">Medicine</title>
+    <link rel="stylesheet" th:href="@{/medicines/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container" style="max-width:600px">
+    <h1 th:text="${medicine.id == null} ? 'Add medicine' : 'Edit medicine'">Medicine</h1>
+
+    <!-- th:object = this form is bound to the "medicine" object from the Model.
+         *{field} = a field of that object. th:field fills in name, id and value. -->
+    <form th:action="@{/medicines/save}" th:object="${medicine}" method="post">
+
+        <!-- Hidden id: empty when adding, filled when editing -> save() knows which -->
+        <input type="hidden" th:field="*{id}">
+
+        <p>
+            <label>Name *</label><br>
+            <input type="text" th:field="*{name}" style="width:100%">
+            <!-- th:errors = show this field's validation message, if any -->
+            <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </p>
+
+        <p>
+            <label>Generic name</label><br>
+            <input type="text" th:field="*{genericName}" style="width:100%">
+        </p>
+
+        <p>
+            <label>Form</label><br>
+            <select th:field="*{form}">
+                <option value="">-- choose --</option>
+                <option th:each="f : ${forms}" th:value="${f}" th:text="${f}"></option>
+            </select>
+        </p>
+
+        <p>
+            <label>Strength</label><br>
+            <input type="text" th:field="*{strength}" placeholder="e.g. 500 mg">
+        </p>
+
+        <p>
+            <label>Unit</label><br>
+            <input type="text" th:field="*{unit}" placeholder="tablet, bottle, vial">
+        </p>
+
+        <p>
+            <label>Reorder level *</label><br>
+            <input type="number" th:field="*{reorderLevel}" min="0">
+            <span class="error" th:if="${#fields.hasErrors('reorderLevel')}" th:errors="*{reorderLevel}"></span>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" th:field="*{essential}"> Essential medicine
+            </label>
+        </p>
+
+        <button type="submit" class="btn">Save</button>
+        <a th:href="@{/medicines}" class="btn btn-light">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

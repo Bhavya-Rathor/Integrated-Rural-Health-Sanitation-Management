@@ -80,4 +80,8 @@ public class StockService {
                 .filter(entry -> entry.getValue() < reorderLevels.get(entry.getKey()))
                 .count();
     }
+    // All batches of one medicine, soonest expiry first (detail page).
+    public List<Stock> findByMedicine(Long medicineId) {
+        return stockRepository.findByMedicineIdOrderByExpiryDateAsc(medicineId);
+    }
 }
