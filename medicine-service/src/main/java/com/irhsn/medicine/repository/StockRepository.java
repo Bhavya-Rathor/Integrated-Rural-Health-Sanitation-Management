@@ -35,4 +35,7 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     // Does this medicine have ANY stock batches at any centre?
     // true/false. Used to block deleting a medicine that still has stock.
     boolean existsByMedicineId(Long medicineId);
+    // All batches of one medicine (at every centre), soonest expiry first.
+    // Used on the medicine detail page.
+    List<Stock> findByMedicineIdOrderByExpiryDateAsc(Long medicineId);
 }
