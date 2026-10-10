@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Public-health issues')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container">
+    <div class="page-header">
+        <h1>Public-health issues</h1>
+        <a th:href="@{/water/sources}">View water sources</a>
+    </div>
+
+    <form class="filters" method="get" th:action="@{/water/issues}">
+        <select name="status">
+            <option value="">All statuses</option>
+            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == selectedStatus}"></option>
+        </select>
+        <button type="submit" class="btn">Filter</button>
+        <a th:href="@{/water/issues}">Clear</a>
+    </form>
+
+    <table class="table">
+        <thead><tr><th>#</th><th>Title</th><th>Village</th><th>Priority</th><th>Status</th><th>Reported</th><th>Linked facility</th></tr></thead>
+        <tbody>
+        <tr th:each="i : ${issues}">
+            <td th:text="${i.id}"></td>
+            <td><a th:href="@{/water/issues/{id}(id=${i.id})}" th:text="${i.title}"></a></td>
+            <td th:text="${i.village}"></td>
+            <td><span class="badge" th:classappend="${i.priority.name()}" th:text="${i.priority}"></span></td>
+            <td><span class="badge" th:classappend="${i.status.name()}" th:text="${i.status}"></span></td>
+            <td th:text="${i.reportedOn}"></td>
+            <td th:text="${i.nearbyFacilityName} ?: '–'"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(issues)}"><td colspan="7">No issues found.</td></tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

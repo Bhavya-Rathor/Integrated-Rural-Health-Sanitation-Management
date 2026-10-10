@@ -40,4 +40,8 @@ public class SourceService {
             return sourceRepository.save(existing);
         });
     }
+
+    public List<String> villages() {
+        return sourceRepository.findDistinctVillages();
+    }
 }

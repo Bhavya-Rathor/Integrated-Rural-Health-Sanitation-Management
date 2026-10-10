@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Issue details')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container">
+    <p class="flash" th:if="${message}" th:text="${message}"></p>
+    <p class="flash error" th:if="${error}" th:text="${error}"></p>
+
+    <h1 th:text="${issue.title}">Issue</h1>
+    <dl class="details">
+        <dt>Village</dt>  <dd th:text="${issue.village}"></dd>
+        <dt>Problem</dt>  <dd th:text="${issue.description}"></dd>
+        <dt>Priority</dt> <dd><span class="badge" th:classappend="${issue.priority.name()}" th:text="${issue.priority}"></span></dd>
+        <dt>Status</dt>   <dd><span class="badge" th:classappend="${issue.status.name()}" th:text="${issue.status}"></span></dd>
+        <dt>Reported</dt> <dd th:text="${issue.reportedOn}"></dd>
+        <dt>Water source</dt>
+        <dd><a th:href="@{/water/sources/{id}(id=${issue.source.id})}" th:text="${issue.source.name}"></a></dd>
+        <dt>Nearby sanitation facility</dt>
+        <dd>
+            <a th:if="${issue.nearbyFacilityId != null}"
+               th:href="@{/sanitation/facilities/{id}(id=${issue.nearbyFacilityId})}"
+               th:text="${issue.nearbyFacilityName}"></a>
+            <span th:if="${issue.nearbyFacilityId == null}">None linked (no broken facility found, or Sanitation was unavailable)</span>
+        </dd>
+        <dt>Officer remarks</dt> <dd th:text="${issue.officerRemarks} ?: '–'"></dd>
+    </dl>
+
+    <h2>Corrective actions</h2>
+    <form class="form inline" method="post" th:action="@{/water/issues/{id}/actions(id=${issue.id})}">
+        <select name="actionType">
+            <option value="CHLORINATION">Chlorination</option>
+            <option value="PIPE_REPAIR">Pipe repair</option>
+            <option value="ALTERNATE_SUPPLY">Alternate supply</option>
+            <option value="AWARENESS">Awareness</option>
+        </select>
+        <input type="text" name="description" placeholder="What will be done">
+        <input type="text" name="assignedTo" placeholder="Assigned to" required>
+        <input type="date" name="actionDate" required>
+        <button type="submit" class="btn">Add action</button>
+    </form>
+
+    <table class="table">
+        <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Assigned to</th><th>Status</th></tr></thead>
+        <tbody>
+        <tr th:each="a : ${actions}">
+            <td th:text="${a.actionDate}"></td>
+            <td th:text="${a.actionType}"></td>
+            <td th:text="${a.description}"></td>
+            <td th:text="${a.assignedTo}"></td>
+            <td><span class="badge" th:classappend="${a.status.name()}" th:text="${a.status}"></span></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(actions)}"><td colspan="5">No actions yet.</td></tr>
+        </tbody>
+    </table>
+    <p><a th:href="@{/water/issues}">← Back to all issues</a></p>
+</main>
+</body>
+</html>

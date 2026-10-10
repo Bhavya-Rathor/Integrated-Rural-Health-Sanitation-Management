@@ -10,4 +10,5 @@ public interface PublicHealthIssueRepository extends JpaRepository<PublicHealthI
     List<PublicHealthIssue> findAllByOrderByReportedOnDesc();
     List<PublicHealthIssue> findByStatusNotOrderByReportedOnDesc(WorkStatus status);
     long countByStatusNot(WorkStatus status);
+    List<PublicHealthIssue> findByStatusOrderByReportedOnDesc(WorkStatus status);
 }
