@@ -1,0 +1,130 @@
+### 1. List all medicines (should be [] at first)
+GET http://localhost:8084/api/medicines
+
+### 2. Add a medicine
+POST http://localhost:8084/api/medicines
+Content-Type: application/json
+
+{
+  "name": "Paracetamol 500 mg",
+  "genericName": "Paracetamol",
+  "form": "TABLET",
+  "strength": "500 mg",
+  "unit": "tablet",
+  "reorderLevel": 100,
+  "essential": false
+}
+
+### 3. Get medicine number 1
+GET http://localhost:8084/api/medicines/1
+
+### 4. Search by name
+GET http://localhost:8084/api/medicines?search=para
+
+### 5. How much of medicine 1 is at centre 1? (0 for now, no stock yet)
+GET http://localhost:8084/api/medicines/1/availability?centreId=1
+
+### 6. Medicine that doesn't exist -> expect 404
+GET http://localhost:8084/api/medicines/999
+
+### 7. Same name again -> expect 409
+POST http://localhost:8084/api/medicines
+Content-Type: application/json
+
+{
+  "name": "Paracetamol 500 mg",
+  "form": "TABLET",
+  "reorderLevel": 100
+}
+
+### 8. Blank name and negative reorder level -> expect 400
+POST http://localhost:8084/api/medicines
+Content-Type: application/json
+
+{
+  "name": "",
+  "form": "TABLET",
+  "reorderLevel": -5
+}
+### 9. Batch A: expires SOON (100 tablets of Paracetamol at centre 1)
+POST http://localhost:8084/api/medicines/1/stock
+Content-Type: application/json
+
+{
+  "centreId": 1,
+  "batchNo": "B-101",
+  "quantity": 100,
+  "expiryDate": "2026-11-15"
+}
+
+### 10. Batch B: expires LATER (150 tablets, same medicine, same centre)
+POST http://localhost:8084/api/medicines/1/stock
+Content-Type: application/json
+
+{
+  "centreId": 1,
+  "batchNo": "B-205",
+  "quantity": 150,
+  "expiryDate": "2027-06-30"
+}
+
+### 11. Centre 1's stock -> should list both batches
+GET http://localhost:8084/api/medicines/stock?centreId=1
+
+### 12. Total now -> should say 250
+GET http://localhost:8084/api/medicines/1/availability?centreId=1
+
+### 13. Expiring within 60 days -> should list only B-101
+GET http://localhost:8084/api/medicines/stock/expiring?days=60
+
+### 14. Stock for a medicine that doesn't exist -> expect 404
+POST http://localhost:8084/api/medicines/999/stock
+Content-Type: application/json
+
+{
+  "centreId": 1,
+  "batchNo": "X-1",
+  "quantity": 10,
+  "expiryDate": "2027-01-01"
+}
+### 15. Issue 120 tablets -> FEFO: 100 from B-101 (expires first), 20 from B-205
+POST http://localhost:8084/api/medicines/issue
+Content-Type: application/json
+
+{
+  "medicineId": 1,
+  "centreId": 1,
+  "quantity": 120,
+  "residentId": 5,
+  "appointmentId": 12,
+  "issuedBy": "Pharmacist Ravi"
+}
+
+### 16. Stock after -> B-101 = 0, B-205 = 130
+GET http://localhost:8084/api/medicines/stock?centreId=1
+
+### 17. Issue 40 more -> total drops to 90, below 100 -> AUTO restock request created
+POST http://localhost:8084/api/medicines/issue
+Content-Type: application/json
+
+{
+  "medicineId": 1,
+  "centreId": 1,
+  "quantity": 40,
+  "residentId": 7,
+  "issuedBy": "Pharmacist Ravi"
+}
+
+### 18. Too much -> expect 409
+POST http://localhost:8084/api/medicines/issue
+Content-Type: application/json
+
+{
+  "medicineId": 1,
+  "centreId": 1,
+  "quantity": 1000,
+  "issuedBy": "Pharmacist Ravi"
+}
+
+### 19. Resident 5's history
+GET http://localhost:8084/api/medicines/issues?residentId=5

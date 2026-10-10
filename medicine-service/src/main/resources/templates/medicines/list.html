@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!-- xmlns:th = lets me use th:... attributes (Thymeleaf) in this page -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicines</title>
+    <!-- @{...} = Thymeleaf builds the correct URL -->
+    <link rel="stylesheet" th:href="@{/medicines/css/style.css}">
+</head>
+<body>
+
+<!-- Include the shared navbar from fragments/navbar.html -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1>Medicine catalogue</h1>
+
+    <!-- One-time message after saving (comes from RedirectAttributes) -->
+    <div th:if="${message}" class="flash" th:text="${message}"></div>
+
+    <!-- Search + filter. method="get" -> /medicines?search=...&form=... -->
+    <form class="filters" th:action="@{/medicines}" method="get">
+        <input type="text" name="search" placeholder="Search by name"
+               th:value="${search}">
+
+        <select name="form">
+            <option value="">All forms</option>
+            <!-- th:each = repeat this <option> for every DosageForm -->
+            <option th:each="f : ${forms}"
+                    th:value="${f}" th:text="${f}"
+                    th:selected="${f == selectedForm}"></option>
+        </select>
+
+        <button type="submit" class="btn">Search</button>
+        <a th:href="@{/medicines}" class="btn btn-light">Clear</a>
+        <a th:href="@{/medicines/new}" class="btn" style="margin-left:auto">+ Add medicine</a>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th><th>Generic name</th><th>Form</th><th>Strength</th>
+            <th>Reorder level</th><th>Essential</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- One table row per medicine in the "medicines" list from the Model -->
+        <tr th:each="m : ${medicines}">
+            <td th:text="${m.name}">Paracetamol</td>
+            <td th:text="${m.genericName}">-</td>
+            <td th:text="${m.form}">TABLET</td>
+            <td th:text="${m.strength}">500 mg</td>
+            <td th:text="${m.reorderLevel}">100</td>
+            <td>
+                <!-- th:if = only show this span when the condition is true -->
+                <span th:if="${m.essential}" class="badge badge-yes">Essential</span>
+                <span th:unless="${m.essential}" class="badge">No</span>
+            </td>
+            <td>
+                <a th:href="@{/medicines/{id}(id=${m.id})}">View</a> |
+                <a th:href="@{/medicines/{id}/edit(id=${m.id})}">Edit</a>
+            </td>
+        </tr>
+        <!-- Shown only when the list is empty -->
+        <tr th:if="${#lists.isEmpty(medicines)}">
+            <td colspan="7">No medicines found.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
