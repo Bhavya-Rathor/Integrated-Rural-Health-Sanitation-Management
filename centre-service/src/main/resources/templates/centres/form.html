@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Centre Form</title>
+    <style>
+        body { font-family: sans-serif; margin: 24px; max-width: 520px; }
+        label { display: block; margin-top: 12px; font-weight: bold; }
+        input, select { width: 100%; padding: 6px; }
+        .error { color: #c53030; font-size: 0.9em; }
+        .btn { margin-top: 16px; padding: 8px 16px; background: #2b6cb0; color: white; border: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<nav><a href="/centres">Health Centres</a></nav>
+<h1 th:text="${centre.id == null} ? 'Add centre' : 'Edit centre'">Add centre</h1>
+
+<form th:action="@{/centres/save}" th:object="${centre}" method="post">
+    <input type="hidden" th:field="*{id}">
+
+    <label>Name</label>
+    <input type="text" th:field="*{name}">
+    <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+
+    <label>Type</label>
+    <select th:field="*{type}">
+        <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+    </select>
+    <div class="error" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></div>
+
+    <label>Village</label>
+    <input type="text" th:field="*{village}">
+    <div class="error" th:if="${#fields.hasErrors('village')}" th:errors="*{village}"></div>
+
+    <label>District</label>
+    <input type="text" th:field="*{district}">
+
+    <label>Phone</label>
+    <input type="text" th:field="*{phone}">
+    <div class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+
+    <label>Opening time</label>
+    <input type="time" th:field="*{openingTime}">
+
+    <label>Closing time</label>
+    <input type="time" th:field="*{closingTime}">
+
+    <label><input type="checkbox" th:field="*{open24x7}" style="width:auto"> Open 24x7</label>
+
+    <label>Status</label>
+    <select th:field="*{status}">
+        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+    </select>
+
+    <button class="btn" type="submit">Save</button>
+    <a href="/centres">Cancel</a>
+</form>
+</body>
+</html>
