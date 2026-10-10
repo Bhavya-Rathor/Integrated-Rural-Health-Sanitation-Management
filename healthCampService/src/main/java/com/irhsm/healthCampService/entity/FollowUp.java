@@ -1,22 +1,22 @@
 package com.irhsm.healthCampService.entity;
 
-import jakarta.persistence.*;                             
-import lombok.AllArgsConstructor;                        
-import lombok.Getter;                                     
-import lombok.NoArgsConstructor;                         
-import lombok.Setter;                                    
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;   
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "follow_up")
-@Getter 
-@Setter 
-@NoArgsConstructor 
-@AllArgsConstructor 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class FollowUp {
-    @Id 
+    @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;  // Column: id; the dashboard's PUT /{id}/status uses this id
 
@@ -24,9 +24,9 @@ public class FollowUp {
 
     @JoinColumn (name="screening_id", nullable = false, unique = true) // Required, and unique so a screening can't get two follow-ups
     private  Screening screening;
-    
+
     private Long residentId;
-    private Long residentName;
+    private String residentName;   // a name is text (was Long by mistake)
     private String village;
 
     @Enumerated(EnumType.STRING)

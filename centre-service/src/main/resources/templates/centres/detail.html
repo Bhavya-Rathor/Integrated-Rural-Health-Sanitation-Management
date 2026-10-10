@@ -4,14 +4,37 @@
     <meta charset="UTF-8">
     <title>Centre Detail</title>
     <style>
-        body { font-family: sans-serif; margin: 24px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 8px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background: #f0f0f0; }
+        /* Team style (same as Medicine, Dashboard, Sanitation, Health Camps) */
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+        .navbar { background: #2f6f8f; padding: 10px 20px; }
+        .navbar a { color: #fff; margin-right: 16px; text-decoration: none; font-size: 14px; }
+        .navbar a.active { font-weight: bold; text-decoration: underline; }
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+        h1 { font-size: 24px; margin-bottom: 16px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 12px; }
+        th, td { padding: 9px 12px; border-bottom: 1px solid #e3e3e3; text-align: left; font-size: 14px; }
+        th { background: #eef3f6; }
+        input, select { padding: 7px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .btn { display: inline-block; padding: 7px 14px; border-radius: 5px; background: #2f6f8f;
+               color: #fff; text-decoration: none; border: none; cursor: pointer; font-size: 14px; }
+        .btn-light { background: #e3e8ec; color: #222; }
+        .btn-danger { background: #b03a2e; }
+        .error { color: #b03a2e; font-size: 13px; }
     </style>
 </head>
 <body>
-<nav><a href="/centres">Health Centres</a></nav>
+<!-- Navbar links point at the gateway (8080) so they work even if a page is opened on its own port -->
+<nav class="navbar">
+    <a href="http://localhost:8080/dashboard">Dashboard</a>
+    <a href="http://localhost:8080/residents">Residents</a>
+    <a href="http://localhost:8080/centres" class="active">Health Centres</a>
+    <a href="http://localhost:8080/appointments">Appointments</a>
+    <a href="http://localhost:8080/medicines">Medicines</a>
+    <a href="http://localhost:8080/camps">Health Camps</a>
+    <a href="http://localhost:8080/sanitation">Sanitation</a>
+    <a href="http://localhost:8080/water">Water</a>
+</nav>
+<div class="container">
 <h1 th:text="${centre.name}">Centre</h1>
 <p>
     <b>Type:</b> <span th:text="${centre.type}"></span> &nbsp;
@@ -43,7 +66,8 @@
 </table>
 
 <form th:action="@{/centres/{id}/delete(id=${centre.id})}" method="post" style="margin-top:16px">
-    <button type="submit" onclick="return confirm('Delete this centre?')">Delete centre</button>
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Delete this centre?')">Delete centre</button>
 </form>
+</div>
 </body>
 </html>

@@ -11,4 +11,6 @@ public interface ScreeningRepository extends JpaRepository<Screening, Long> {
     List<Screening> findByBeneficiaryResidentId(Long residentId);
     long countByResultNot(ScreeningResult result);
 
+    // All screenings of one camp (beneficiary -> camp -> id), newest first
+    List<Screening> findByBeneficiaryCampIdOrderByScreenedAtDesc(Long campId);
 }

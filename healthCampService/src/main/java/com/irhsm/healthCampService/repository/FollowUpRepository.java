@@ -10,4 +10,7 @@ public interface FollowUpRepository extends JpaRepository<FollowUp, Long> {
     List<FollowUp> findByStatusOrderByDueDateAsc(FollowUpStatus status);
     List<FollowUp> findAllByOrderByDueDateAsc();
     long countByStatus(FollowUpStatus status);
+
+    // Follow-ups that came from one camp's screenings
+    List<FollowUp> findByScreeningBeneficiaryCampIdOrderByDueDateAsc(Long campId);
 }

@@ -7,20 +7,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity 
+@Entity
 @Table(name = "camp_staff")
 @Getter
-@Setter 
-@NoArgsConstructor 
-@AllArgsConstructor 
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class CampStaff {  // One object of this class = one row in camp_staff
-    @Id 
+    @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;   // Long (not long) like every other entity: null until saved
 
     // Many staff rows belong to one camp, creates the camp_id foreign key column
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn (name = "camp_id", nullable = false)
     private HealthCamp camp;  // In Java we hold the whole camp object; the DB stores only its id
 

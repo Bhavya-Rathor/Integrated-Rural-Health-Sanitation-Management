@@ -1,6 +1,7 @@
 package com.irhsm.healthCampService.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -11,20 +12,20 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity 
+@Entity
 @Table(name = "health_camp")
-@Getter 
-@Setter 
-@NoArgsConstructor 
-@AllArgsConstructor  
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 
 // @Getter @Setter (Lombok) generate getName(), setName() and the rest at compile time.
 // @NoArgsConstructor is required by JPA, which needs an empty constructor to create objects from rows.
 
 public class HealthCamp {
-    @Id 
+    @Id
     @GeneratedValue (strategy =  GenerationType.IDENTITY)
-    private long id;
+    private Long id;   // Long (not long): null = new camp, so the same form can add and edit
 
     @NotBlank(message = "Camp name is required")
     private String name;
@@ -39,14 +40,15 @@ public class HealthCamp {
     @NotBlank(message = "Venue is required")
     private String venue;
 
-    @NotNull(message = "Camp data is required")
+    @NotNull(message = "Camp date is required")
     private LocalDate campDate;
 
     private LocalTime startTime;
     private LocalTime endTime;
 
-    private Long centreId;
+    private Long centreId;   // ID of the health centre in Bhavya's service (plain number, no FK)
 
+    @Min(value = 0, message = "Target cannot be negative")
     private Integer targetCount;
 
 // @Enumerated(EnumType.STRING) stores "PLANNED" as text. Without it, JPA stores 0, 1, 2…, which breaks if enum is ever reordered
