@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Facility details')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <p class="flash" th:if="${message}" th:text="${message}"></p>
+    <p class="flash error" th:if="${error}" th:text="${error}"></p>
+
+    <div class="page-header">
+        <h1 th:text="${facility.name}">Facility</h1>
+        <a class="btn" th:href="@{/sanitation/facilities/{id}/edit(id=${facility.id})}">Edit</a>
+    </div>
+
+    <dl class="details">
+        <dt>Type</dt>        <dd th:text="${facility.type}"></dd>
+        <dt>Village</dt>     <dd th:text="${facility.village}"></dd>
+        <dt>Location</dt>    <dd th:text="${facility.locationDesc}"></dd>
+        <dt>Capacity</dt>    <dd th:text="${facility.capacity}"></dd>
+        <dt>Condition</dt>
+        <dd><span class="badge" th:classappend="${facility.condition.name()}" th:text="${facility.condition}"></span></dd>
+        <dt>Last cleaned</dt><dd th:text="${facility.lastCleanedOn}"></dd>
+        <dt>Caretaker</dt>   <dd th:text="${facility.caretakerName}"></dd>
+    </dl>
+
+    <h2>Inspections</h2>
+    <form class="form inline" method="post"
+          th:action="@{/sanitation/facilities/{id}/inspections(id=${facility.id})}">
+        <input type="date" name="inspectionDate" required>
+        <input type="text" name="inspectorName" placeholder="Inspector name" required>
+        <input type="number" name="cleanlinessScore" min="1" max="5" placeholder="Score 1–5" required>
+        <select name="waterAvailable">
+            <option value="true">Water available</option>
+            <option value="false">No water</option>
+        </select>
+        <input type="text" name="remarks" placeholder="Remarks">
+        <button type="submit" class="btn">Add inspection</button>
+    </form>
+
+    <table class="table">
+        <thead><tr><th>Date</th><th>Inspector</th><th>Score</th><th>Water</th><th>Remarks</th></tr></thead>
+        <tbody>
+        <tr th:each="i : ${inspections}">
+            <td th:text="${i.inspectionDate}"></td>
+            <td th:text="${i.inspectorName}"></td>
+            <td th:text="${i.cleanlinessScore} + ' / 5'"></td>
+            <td th:text="${i.waterAvailable} ? 'Yes' : 'No'"></td>
+            <td th:text="${i.remarks}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(inspections)}"><td colspan="5">No inspections yet.</td></tr>
+        </tbody>
+    </table>
+
+    <h2>Complaints</h2>
+    <table class="table">
+        <thead><tr><th>Title</th><th>Priority</th><th>Status</th><th>Reported</th><th>Officer remarks</th></tr></thead>
+        <tbody>
+        <tr th:each="c : ${complaints}">
+            <td th:text="${c.title}"></td>
+            <td><span class="badge" th:classappend="${c.priority.name()}" th:text="${c.priority}"></span></td>
+            <td><span class="badge" th:classappend="${c.status.name()}" th:text="${c.status}"></span></td>
+            <td th:text="${c.reportedOn}"></td>
+            <td th:text="${c.officerRemarks}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(complaints)}"><td colspan="5">No complaints for this facility.</td></tr>
+        </tbody>
+    </table>
+
+    <p><a th:href="@{/sanitation/facilities}">← Back to all facilities</a></p>
+</main>
+</body>
+</html>

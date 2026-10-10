@@ -1,6 +1,7 @@
 package com.irhsm.sanitationservice.service;
 
 import com.irhsm.sanitationservice.entity.SanitationFacility;
+import com.irhsm.sanitationservice.enums.FacilityCondition;
 import com.irhsm.sanitationservice.repository.SanitationFacilityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,16 @@ public class FacilityService {
         }
         facilityRepository.deleteById(id);
         return true;
+    }
+
+    // Filter by village (in the database), then by condition (in Java)
+    public List<SanitationFacility> search(String village, FacilityCondition condition) {
+        return findAll(village).stream()
+                .filter(f -> condition == null || f.getCondition() == condition)
+                .toList();
+    }
+
+    public List<String> villages() {
+        return facilityRepository.findDistinctVillages();
     }
 }

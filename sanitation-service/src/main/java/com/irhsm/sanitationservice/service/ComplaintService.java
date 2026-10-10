@@ -86,4 +86,8 @@ public class ComplaintService {
         c.setResolvedOn(newStatus == WorkStatus.RESOLVED ? LocalDate.now() : null);
         return complaintRepository.save(c);
     }
+
+    public List<Complaint> findByFacility(Long facilityId) {
+        return complaintRepository.findByFacilityId(facilityId);
+    }
 }

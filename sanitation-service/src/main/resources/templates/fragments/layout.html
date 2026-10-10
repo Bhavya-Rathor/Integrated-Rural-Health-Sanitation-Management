@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · Rural Health'">Page</title>
+    <link rel="stylesheet" th:href="@{/sanitation/css/style.css}">
+</head>
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <span class="brand">Rural Health &amp; Sanitation</span>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/sanitation">Sanitation</a>
+    <a href="/water">Water</a>
+    <a href="/medicines">Medicines</a>
+    <!-- replace with Sanjeevni's shared navbar; links must start with "/" -->
+</nav>
+</body>
+</html>

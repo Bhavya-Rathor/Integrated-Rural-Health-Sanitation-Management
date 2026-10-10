@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Sanitation facilities')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <div class="page-header">
+        <h1>Sanitation facilities</h1>
+        <a class="btn" th:href="@{/sanitation/facilities/new}">+ Add facility</a>
+    </div>
+
+    <p class="flash" th:if="${message}" th:text="${message}"></p>
+
+    <!-- A GET form: the filter values end up in the URL, like ?village=Katpadi -->
+    <form class="filters" method="get" th:action="@{/sanitation/facilities}">
+        <select name="village">
+            <option value="">All villages</option>
+            <option th:each="v : ${villages}" th:value="${v}" th:text="${v}"
+                    th:selected="${v == selectedVillage}"></option>
+        </select>
+        <select name="condition">
+            <option value="">All conditions</option>
+            <option th:each="c : ${conditions}" th:value="${c}" th:text="${c}"
+                    th:selected="${c == selectedCondition}"></option>
+        </select>
+        <button type="submit" class="btn">Filter</button>
+        <a th:href="@{/sanitation/facilities}">Clear</a>
+    </form>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th><th>Type</th><th>Village</th><th>Capacity</th>
+            <th>Condition</th><th>Last cleaned</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${facilities}">
+            <td><a th:href="@{/sanitation/facilities/{id}(id=${f.id})}" th:text="${f.name}">Name</a></td>
+            <td th:text="${f.type}"></td>
+            <td th:text="${f.village}"></td>
+            <td th:text="${f.capacity}"></td>
+            <td><span class="badge" th:classappend="${f.condition.name()}" th:text="${f.condition}"></span></td>
+            <td th:text="${f.lastCleanedOn}"></td>
+            <td><a th:href="@{/sanitation/facilities/{id}/edit(id=${f.id})}">Edit</a></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(facilities)}">
+            <td colspan="7">No facilities match this filter.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
