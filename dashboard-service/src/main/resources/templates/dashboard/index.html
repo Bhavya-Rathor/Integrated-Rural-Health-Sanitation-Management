@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Community Health Dashboard</title>
+    <link rel="stylesheet" th:href="@{/dashboard/css/style.css}">
+</head>
+<body>
+
+<!-- Navbar: links start with "/" so they go through the gateway -->
+<nav class="navbar">
+    <a href="/dashboard" class="active">Dashboard</a>
+    <a href="/residents">Residents</a>
+    <a href="/centres">Health Centres</a>
+    <a href="/appointments">Appointments</a>
+    <a href="/medicines">Medicines</a>
+    <a href="/camps">Health Camps</a>
+    <a href="/sanitation">Sanitation</a>
+    <a href="/water">Water</a>
+</nav>
+
+<div class="container">
+    <h1>Community Health Dashboard</h1>
+
+    <!-- One-time messages after Approve / Reject -->
+    <div th:if="${message}" class="flash" th:text="${message}"></div>
+    <div th:if="${error}" class="err" th:text="${error}"></div>
+
+    <!-- Headline numbers -->
+    <div class="headline">
+        <div>Pending actions: <span class="big" th:text="${totalPending}">0</span></div>
+        <div>High priority: <span class="big HIGH" th:text="${highPending}">0</span></div>
+    </div>
+
+    <!-- One tile per service. Records are read with method calls: tile.label() -->
+    <div class="tiles">
+        <div th:each="tile : ${tiles}" class="tile" th:classappend="${!tile.available()} ? ' down'">
+            <h3 th:text="${tile.label()}">Service</h3>
+            <div th:if="${tile.available()}">
+                <div>Total: <b th:text="${tile.counts()['total']}">0</b></div>
+                <div>Pending: <b th:text="${tile.counts()['pending']}">0</b></div>
+                <div th:if="${tile.counts()['lowStock'] != null}">
+                    Low stock: <b th:text="${tile.counts()['lowStock']}">0</b></div>
+                <div th:if="${tile.counts()['expiringSoon'] != null}">
+                    Expiring soon: <b th:text="${tile.counts()['expiringSoon']}">0</b></div>
+            </div>
+            <div th:unless="${tile.available()}">Unavailable</div>
+        </div>
+    </div>
+
+    <!-- Pending actions from all services, merged -->
+    <h2>Pending actions</h2>
+
+    <form class="filters" th:action="@{/dashboard}" method="get">
+        <select name="village">
+            <option value="">All villages</option>
+            <option th:each="v : ${villages}" th:value="${v}" th:text="${v}"
+                    th:selected="${v == selectedVillage}"></option>
+        </select>
+        <select name="service">
+            <option value="">All services</option>
+            <option th:each="s : ${services}" th:value="${s.key()}" th:text="${s.label()}"
+                    th:selected="${s.key() == selectedService}"></option>
+        </select>
+        <button type="submit" class="btn ok">Filter</button>
+        <a th:href="@{/dashboard}">Clear</a>
+    </form>
+
+    <table>
+        <thead>
+        <tr><th>Priority</th><th>Service</th><th>What</th><th>Village</th>
+            <th>Status</th><th>Raised</th><th>Officer action</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="row : ${pending}">
+            <td><span th:class="${row.item().priority()}" th:text="${row.item().priority()}">HIGH</span></td>
+            <td th:text="${row.service().label()}">Medicine</td>
+            <td th:text="${row.item().title()}">Restock ...</td>
+            <td th:text="${row.item().village()}">Katpadi</td>
+            <td th:text="${row.item().status()}">PENDING</td>
+            <td th:text="${row.item().date()}">2026-10-07</td>
+            <td>
+                <!-- Hidden fields tell the controller WHICH item of WHICH service -->
+                <form th:action="@{/dashboard/action}" method="post" style="display:flex; gap:6px">
+                    <input type="hidden" name="serviceKey" th:value="${row.service().key()}">
+                    <input type="hidden" name="id" th:value="${row.item().id()}">
+                    <input type="text" name="remarks" placeholder="Remarks" size="14">
+                    <button type="submit" name="decision" value="approve" class="btn ok">Approve</button>
+                    <button type="submit" name="decision" value="reject" class="btn no">Reject</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(pending)}"><td colspan="7">Nothing pending.</td></tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
