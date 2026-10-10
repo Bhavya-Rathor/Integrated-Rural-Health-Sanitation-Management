@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Report complaint')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <h1>Report a complaint</h1>
+
+    <form class="form" method="post" th:action="@{/sanitation/complaints}" th:object="${complaintForm}">
+        <label>Facility
+            <select th:field="*{facilityId}">
+                <option value="">-- choose facility --</option>
+                <option th:each="f : ${facilities}" th:value="${f.id}"
+                        th:text="${f.name + ' (' + f.village + ')'}"></option>
+            </select>
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('facilityId')}" th:errors="*{facilityId}"></span>
+
+        <label>Title
+            <input type="text" th:field="*{title}" placeholder="e.g. Toilet block maintenance needed">
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+
+        <label>Description
+            <textarea th:field="*{description}" rows="3"></textarea>
+        </label>
+
+        <label>Reported by
+            <input type="text" th:field="*{reportedBy}" placeholder="e.g. ASHA worker Meena">
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('reportedBy')}" th:errors="*{reportedBy}"></span>
+
+        <label>Priority
+            <select th:field="*{priority}">
+                <option value="">-- choose --</option>
+                <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"></option>
+            </select>
+        </label>
+        <span class="error" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></span>
+
+        <div class="actions">
+            <button type="submit" class="btn">Submit complaint</button>
+            <a th:href="@{/sanitation/complaints}">Cancel</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
